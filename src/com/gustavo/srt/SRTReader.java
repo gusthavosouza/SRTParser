@@ -2,7 +2,6 @@ package com.gustavo.srt;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
@@ -10,19 +9,26 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.gustavo.utils.SRTUtils;
+
 public class SRTReader {
 
-	private static final Pattern PATTERN_NUMBERS = Pattern.compile("(\\d+?)");
+	private static final Pattern PATTERN_NUMBERS = Pattern.compile("(\\d+)");
 	private static final Pattern PATTERN_TIME = Pattern.compile("([\\d]{2}:[\\d]{2}:[\\d]{2},[\\d]{3}).*([\\d]{2}:[\\d]{2}:[\\d]{2},[\\d]{3})");
 //	private static final Pattern PATTERN_TEXT = Pattern.compile("(.*)");
 	
-//	private boolean twm; // Text with multiline '\n' 
+//	private boolean twm; // Text with multiline '\n'
+//	private boolean usingNodes;
 	
 	public static ArrayList<Subtitle> getSubtitlesFromFile (String path) {
-		return getSubtitlesFromFile(path, false);
+		return getSubtitlesFromFile(path, false, false);
 	}
 	
-	public static ArrayList<Subtitle> getSubtitlesFromFile(String path, boolean twm) {
+	public static ArrayList<Subtitle> getSubtitlesFromFile (String path, boolean twm) {
+		return getSubtitlesFromFile(path, twm, false);
+	}
+	
+	public static ArrayList<Subtitle> getSubtitlesFromFile (String path, boolean twm, boolean usingNodes) {
 		
 		BufferedReader br = null;
 		FileInputStream fis = null;
@@ -32,6 +38,7 @@ public class SRTReader {
 		ArrayList<Subtitle> subtitles = null;
 		Subtitle sub = null;
 		StringBuilder srt = null;
+
 		try {
 			
 			file = new File(path);
@@ -60,8 +67,10 @@ public class SRTReader {
 				matcher = PATTERN_TIME.matcher(line);
 				
 				if (matcher.find()) {
-					sub.startTime = matcher.group(1);
-					sub.endTime = matcher.group(2);
+					sub.startTime = matcher.group(1); // start time
+					sub.timeIn = SRTUtils.textTimeToMillis(sub.startTime);
+					sub.endTime = matcher.group(2); // end time
+					sub.timeOut = SRTUtils.textTimeToMillis(sub.endTime);
 				}
 				
 				String aux;
@@ -84,9 +93,14 @@ public class SRTReader {
 					line = line.replaceAll("<[^>]*>", ""); // clear all tags
 				
 				sub.text = line;
-				
 				subtitles.add(sub);
-				sub = new Subtitle();
+
+				if (usingNodes) {
+					sub.nextSubtitle = new Subtitle();
+					sub = sub.nextSubtitle;
+				} else {
+					sub = new Subtitle();
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
