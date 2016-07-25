@@ -1,0 +1,13 @@
+1
+00:00:00,000 --> 00:00:01,500
+By Gusthavo de Souza
+
+2
+00:00:01,500 --> 00:00:02,500
+<i>Testing str file.</i>
+
+3
+00:00:03,000 --> 00:00:15,000
+<i>And it's going to happen
+new lines test
+again and again --</i>
