@@ -54,7 +54,7 @@ public class SRTUtils {
 
 			if (sub.nextSubtitle != null && sub.nextSubtitle.timeIn >= timeMillis)
 				return sub.nextSubtitle;
-			else if (listSubtitles.size() < i+1) // is last?
+			else if (listSubtitles.size() <= i+1) // is last?
 				continue;
 
 			// get next element for test if is a legend

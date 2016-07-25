@@ -2,7 +2,6 @@ package com.gustavo.srt;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -16,6 +15,7 @@ public class SRTReader {
 	private static final Pattern PATTERN_NUMBERS = Pattern.compile("(\\d+)");
 	private static final Pattern PATTERN_TIME = Pattern.compile("([\\d]{2}:[\\d]{2}:[\\d]{2},[\\d]{3}).*([\\d]{2}:[\\d]{2}:[\\d]{2},[\\d]{3})");
 //	private static final Pattern PATTERN_TEXT = Pattern.compile("(.*)");
+	private static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
 	
 //	private boolean twm; // Text with multiline '\n'
 //	private boolean usingNodes;
@@ -30,22 +30,12 @@ public class SRTReader {
 	
 	public static ArrayList<Subtitle> getSubtitlesFromFile (String path, boolean twm, boolean usingNodes) {
 		
-		BufferedReader br = null;
-		FileInputStream fis = null;
-		InputStreamReader isr = null;
-		File file = null;
-
 		ArrayList<Subtitle> subtitles = null;
 		Subtitle sub = null;
 		StringBuilder srt = null;
 
-		try {
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(new File(path)), DEFAULT_CHARSET))) {
 			
-			file = new File(path);
-			fis = new FileInputStream(file);
-			isr = new InputStreamReader(fis, Charset.forName("UTF-8"));
-			br = new BufferedReader(isr);
-
 			subtitles = new ArrayList<>();
 			sub = new Subtitle();
 			srt = new StringBuilder();
@@ -53,9 +43,6 @@ public class SRTReader {
 			while (br.ready()) {
 				
 				String line = br.readLine();
-				
-//				if (validateLine(line))
-//					continue;
 				
 				Matcher matcher = PATTERN_NUMBERS.matcher(line); 
 
@@ -104,11 +91,7 @@ public class SRTReader {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			try { fis.close(); } catch (IOException e) {}
-			try { isr.close(); } catch (IOException e) {}
-			try { br.close(); } catch (IOException e) {}
-		}
+		} 
 		return subtitles;
 	}
 	

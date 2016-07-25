@@ -16,7 +16,7 @@ public class Test {
 			e.printStackTrace();
 		}
 		
-		String path = System.getProperty("user.dir") + "\\files\\jiro.srt";
+		String path = System.getProperty("user.dir") + "\\files\\sub.srt";
 		
 		System.out.println(path);
 		
@@ -25,7 +25,7 @@ public class Test {
 		
 //		3600360
 //		3578992
-		System.out.println(SRTUtils.findSubtitle(subtitles, 1616286)); 
+		System.out.println(SRTUtils.findSubtitle(subtitles, 000100)); 
 //		
 //		for (Subtitle subtitle : subtitles) {
 //			System.out.println(subtitle);
