@@ -4,15 +4,23 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.gustavo.srt.SRTReader;
 import com.gustavo.srt.Subtitle;
 
-public class SRTUtils {	
+public final class SRTUtils {	
 	
 	public final static long MILLIS_IN_SECOND = 1000;
 	public final static long MILLIS_IN_MINUTE = MILLIS_IN_SECOND * 60; // 60000
 	public final static long MILLIS_IN_HOUR = MILLIS_IN_MINUTE * 60; // 3600000
 	
 	protected final static Pattern PATTERN_TIME = Pattern.compile("([\\d]{2}):([\\d]{2}):([\\d]{2}),([\\d]{3})");
+	
+	/**
+	 * Metodo responsavel por converter uma String com o formato de tempo HH:mm:ss,SSS em millis
+	 * @param time
+	 * @return texto convertido em millis
+	 * @throws Exception
+	 */
 	
 	public static long textTimeToMillis (final String time) throws Exception {
 		
@@ -38,18 +46,26 @@ public class SRTUtils {
 		return msTime;
 	}
 	
+	
+	/**
+	 * Metodo responsavel por buscar um Subtitle em uma lista a partir do tempo passado <b>timeMillis</b>
+	 * @param listSubtitles
+	 * @param timeMillis
+	 * @return um Subtitle ou null no caso de nada encontrado
+	 */
 	public static Subtitle findSubtitle (ArrayList<Subtitle> listSubtitles, long timeMillis) {
 		
 		if (listSubtitles == null || listSubtitles.isEmpty())
 			return null;
 		
-		// probability is first index 
+		// most likely is first index 
 		if (timeMillis == 0 || timeMillis < 1000)
 			return listSubtitles.get(0);
 			
 		for (int i = 0; i < listSubtitles.size(); i++) {
 			Subtitle sub = listSubtitles.get(i);
-			if (timeMillis >= sub.timeIn && timeMillis <= sub.timeOut)
+
+			if (inTime(sub, timeMillis))
 				return sub;
 
 			if (sub.nextSubtitle != null && sub.nextSubtitle.timeIn >= timeMillis)
@@ -65,21 +81,36 @@ public class SRTUtils {
 		return null;
 	}
 	
-	public static Subtitle findSubtitle (final Subtitle subtitle, long time) {
+	/**
+	 * Metodo responsavel por buscar um Subtitle a partir de um {@link Subtitle}, utilizando node<br>
+	 * Obs. Deve ser configurado no load do arquivo para utilizar Node #{@link SRTReader#getSubtitlesFromFile(String, boolean, boolean)}
+	 * @param subtitle
+	 * @param timeMillis
+	 * @return
+	 */
+	public static Subtitle findSubtitle (final Subtitle subtitle, long timeMillis) {
 		
 		if (subtitle == null)
 			return subtitle;
 		
-		Subtitle subAux = null;
-		
-		while ((subAux = subtitle.nextSubtitle) != null)
-			if (time >= subAux.timeIn && time <= subAux.timeOut)
+		Subtitle subAux;
+		while (( subAux = subtitle.nextSubtitle) != null)
+			if (inTime(subAux, timeMillis))
 				return subAux;
-		
 //		while ((subAux = subAux.previousSubtitle) != null)
 //			if (time >= subAux.timeIn && time <= subAux.timeOut)
 //				return  subAux;
 //		
 		return subAux;
+	}
+	
+	/**
+	 * Method responsavel por testar se um subtititulo está dentro do tempo buscado.
+	 * @param subtitle
+	 * @param timeMillis
+	 * @return
+	 */
+	private static boolean inTime(final Subtitle subtitle, long timeMillis) {
+		return timeMillis >= subtitle.timeIn && timeMillis <= subtitle.timeOut;
 	}
 }

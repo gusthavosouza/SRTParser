@@ -8,26 +8,44 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
+
 import com.gustavo.utils.SRTUtils;
 
-public class SRTReader {
+public final class SRTReader {
 
-	private static final Pattern PATTERN_NUMBERS = Pattern.compile("(\\d+)");
 	private static final Pattern PATTERN_TIME = Pattern.compile("([\\d]{2}:[\\d]{2}:[\\d]{2},[\\d]{3}).*([\\d]{2}:[\\d]{2}:[\\d]{2},[\\d]{3})");
-//	private static final Pattern PATTERN_TEXT = Pattern.compile("(.*)");
+	private static final Pattern PATTERN_NUMBERS = Pattern.compile("(\\d+)");
 	private static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
 	
-//	private boolean twm; // Text with multiline '\n'
-//	private boolean usingNodes;
+	private final static Logger logger = Logger.getLogger(SRTReader.class);
 	
+	/**
+	 * Metodo responsavel por fazer parse de um arquivos de legenda. <br>
+	 * Obs. O texto não vai conter quebra de linhas e não é usado Node {@link SRTReader#getSubtitlesFromFile(String, boolean, boolean)}}
+	 * @param path
+	 * @return
+	 */
 	public static ArrayList<Subtitle> getSubtitlesFromFile (String path) {
 		return getSubtitlesFromFile(path, false, false);
 	}
 	
+	/**
+	 * Metodo responsavel por fazer parse de um arquivos de legenda. <br>
+	 * Obs. O texto pode ou nao conter quebra de linhas e não é usado Node {@link SRTReader#getSubtitlesFromFile(String, boolean, boolean)}}
+	 * @param path
+	 * @return
+	 */
 	public static ArrayList<Subtitle> getSubtitlesFromFile (String path, boolean twm) {
 		return getSubtitlesFromFile(path, twm, false);
 	}
 	
+	/**
+	 * Metodo responsavel por fazer parse de um arquivos de legenda. <br>
+	 * Obs. O texto não vai conter quebra de linhas e pode ser usado Node
+	 * @param path
+	 * @return
+	 */
 	public static ArrayList<Subtitle> getSubtitlesFromFile (String path, boolean twm, boolean usingNodes) {
 		
 		ArrayList<Subtitle> subtitles = null;
@@ -90,12 +108,8 @@ public class SRTReader {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("error parsing srt file", e);
 		} 
 		return subtitles;
-	}
-	
-	public static boolean validateLine (String line) {
-		return line == null || line.isEmpty() || line.equals("\n") || line.equals("\r");
 	}
 }
