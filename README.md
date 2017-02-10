@@ -1,9 +1,13 @@
-# SRTReader
+# SRTParser
 
-## Java SRTReader.
+## Java SRTParser.
 
-This projec is a Java SRT Reader, for read srt files and return a Subtitle object.
+SRTParser is a project Java 1.7+, maven.
 
+##### What is this project for?
+To parse a .srt file and return an ArrayList<Subtitle> of subtitles and to find a subtitle text by a time.
+
+##### Use
 For testing, we have a class called Test.java in package com.gustavo.test, or look code bellow
 
 ```	
@@ -13,8 +17,8 @@ For testing, we have a class called Test.java in package com.gustavo.test, or lo
 			.getSubtitlesFromFile(path, true);
 
 	for (Subtitle subtitle : subtitles) {
-		System.out.println(subtitle); // look toString
+		logger.info(subtitle); // look toString
 	}
 ```
 
-Version 1.0
+Version 0.0.1
