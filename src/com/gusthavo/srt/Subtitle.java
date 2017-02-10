@@ -1,4 +1,4 @@
-package com.gustavo.srt;
+package com.gusthavo.srt;
 
 public class Subtitle {
 

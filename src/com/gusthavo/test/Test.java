@@ -1,12 +1,12 @@
-package com.gustavo.test;
+package com.gusthavo.test;
 
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
-import com.gustavo.srt.SRTReader;
-import com.gustavo.srt.Subtitle;
-import com.gustavo.utils.SRTUtils;
+import com.gusthavo.srt.SRTParser;
+import com.gusthavo.srt.Subtitle;
+import com.gusthavo.utils.SRTUtils;
 
 public class Test {
 
@@ -24,7 +24,7 @@ public class Test {
 		
 		logger.info(path);
 		
-		ArrayList<Subtitle> subtitles = SRTReader
+		ArrayList<Subtitle> subtitles = SRTParser
 				.getSubtitlesFromFile(path, false);
 
 		logger.info(SRTUtils.findSubtitle(subtitles, 000100));

@@ -1,4 +1,4 @@
-package com.gustavo.srt;
+package com.gusthavo.srt;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,19 +10,19 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
-import com.gustavo.utils.SRTUtils;
+import com.gusthavo.utils.SRTUtils;
 
-public final class SRTReader {
+public final class SRTParser {
 
 	private static final Pattern PATTERN_TIME = Pattern.compile("([\\d]{2}:[\\d]{2}:[\\d]{2},[\\d]{3}).*([\\d]{2}:[\\d]{2}:[\\d]{2},[\\d]{3})");
 	private static final Pattern PATTERN_NUMBERS = Pattern.compile("(\\d+)");
 	private static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
 	
-	private final static Logger logger = Logger.getLogger(SRTReader.class);
+	private final static Logger logger = Logger.getLogger(SRTParser.class);
 	
 	/**
 	 * Metodo responsavel por fazer parse de um arquivos de legenda. <br>
-	 * Obs. O texto não vai conter quebra de linhas e não é usado Node {@link SRTReader#getSubtitlesFromFile(String, boolean, boolean)}}
+	 * Obs. O texto não vai conter quebra de linhas e não é usado Node {@link SRTParser#getSubtitlesFromFile(String, boolean, boolean)}}
 	 * @param path
 	 * @return
 	 */
@@ -32,7 +32,7 @@ public final class SRTReader {
 	
 	/**
 	 * Metodo responsavel por fazer parse de um arquivos de legenda. <br>
-	 * Obs. O texto pode ou nao conter quebra de linhas e não é usado Node {@link SRTReader#getSubtitlesFromFile(String, boolean, boolean)}}
+	 * Obs. O texto pode ou nao conter quebra de linhas e não é usado Node {@link SRTParser#getSubtitlesFromFile(String, boolean, boolean)}}
 	 * @param path
 	 * @return
 	 */

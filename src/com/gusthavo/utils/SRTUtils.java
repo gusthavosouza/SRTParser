@@ -1,11 +1,11 @@
-package com.gustavo.utils;
+package com.gusthavo.utils;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.gustavo.srt.SRTReader;
-import com.gustavo.srt.Subtitle;
+import com.gusthavo.srt.SRTParser;
+import com.gusthavo.srt.Subtitle;
 
 public final class SRTUtils {	
 	
@@ -83,7 +83,7 @@ public final class SRTUtils {
 	
 	/**
 	 * Metodo responsavel por buscar um Subtitle a partir de um {@link Subtitle}, utilizando node<br>
-	 * Obs. Deve ser configurado no load do arquivo para utilizar Node #{@link SRTReader#getSubtitlesFromFile(String, boolean, boolean)}
+	 * Obs. Deve ser configurado no load do arquivo para utilizar Node #{@link SRTParser#getSubtitlesFromFile(String, boolean, boolean)}
 	 * @param subtitle
 	 * @param timeMillis
 	 * @return
