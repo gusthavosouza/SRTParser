@@ -1,28 +1,29 @@
-package com.gusthavo.srt;
+package main.java.gusthavo.srt;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
-import com.gusthavo.utils.SRTUtils;
+import main.java.gusthavo.utils.SRTUtils;
 
 public final class SRTParser {
 
 	private static final Pattern PATTERN_TIME = Pattern.compile("([\\d]{2}:[\\d]{2}:[\\d]{2},[\\d]{3}).*([\\d]{2}:[\\d]{2}:[\\d]{2},[\\d]{3})");
 	private static final Pattern PATTERN_NUMBERS = Pattern.compile("(\\d+)");
-	private static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
+	private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 	
 	private final static Logger logger = Logger.getLogger(SRTParser.class);
 	
 	/**
 	 * Metodo responsavel por fazer parse de um arquivos de legenda. <br>
-	 * Obs. O texto não vai conter quebra de linhas e não é usado Node {@link SRTParser#getSubtitlesFromFile(String, boolean, boolean)}}
+	 * Obs. O texto nï¿½o vai conter quebra de linhas e nï¿½o ï¿½ usado Node {@link SRTParser#getSubtitlesFromFile(String, boolean, boolean)}}
 	 * @param path
 	 * @return
 	 */
@@ -32,7 +33,7 @@ public final class SRTParser {
 	
 	/**
 	 * Metodo responsavel por fazer parse de um arquivos de legenda. <br>
-	 * Obs. O texto pode ou nao conter quebra de linhas e não é usado Node {@link SRTParser#getSubtitlesFromFile(String, boolean, boolean)}}
+	 * Obs. O texto pode ou nao conter quebra de linhas e nï¿½o ï¿½ usado Node {@link SRTParser#getSubtitlesFromFile(String, boolean, boolean)}}
 	 * @param path
 	 * @return
 	 */
@@ -42,7 +43,7 @@ public final class SRTParser {
 	
 	/**
 	 * Metodo responsavel por fazer parse de um arquivos de legenda. <br>
-	 * Obs. O texto não vai conter quebra de linhas e pode ser usado Node
+	 * Obs. O texto nï¿½o vai conter quebra de linhas e pode ser usado Node
 	 * @param path
 	 * @return
 	 */
