@@ -1,6 +1,10 @@
 package main.java.gusthavo.srt;
+
+import main.java.gusthavo.utils.SRTUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
@@ -9,83 +13,102 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
-
-import main.java.gusthavo.utils.SRTUtils;
-
 public final class SRTParser {
+
+	private final static Logger logger = LogManager.getLogger(SRTParser.class);
 
 	private static final Pattern PATTERN_TIME = Pattern.compile("([\\d]{2}:[\\d]{2}:[\\d]{2},[\\d]{3}).*([\\d]{2}:[\\d]{2}:[\\d]{2},[\\d]{3})");
 	private static final Pattern PATTERN_NUMBERS = Pattern.compile("(\\d+)");
 	private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
-	
-	private final static Logger logger = Logger.getLogger(SRTParser.class);
-	
+
+	private static final String REGEX_REMOVE_TAGS = "<[^>]*>";
+
+	private static final int PATTERN_TIME_REGEX_GROUP_START_TIME = 1;
+	private static final int PATTERN_TIME_REGEX_GROUP_END_TIME = 2;
+
 	/**
+	 *
+	 * This method is responsible for parsing a STR file.
+	 *
+	 * This method will not have any new line and also will not make the use of nodes see: Node {@link SRTParser#getSubtitlesFromFile(String, boolean, boolean)}}
+	 *
 	 * Metodo responsavel por fazer parse de um arquivos de legenda. <br>
-	 * Obs. O texto n�o vai conter quebra de linhas e n�o � usado Node {@link SRTParser#getSubtitlesFromFile(String, boolean, boolean)}}
+	 * Obs. O texto nao vai conter quebra de linhas e nao é utilizado Node {@link SRTParser#getSubtitlesFromFile(String, boolean, boolean)}}
 	 * @param path
 	 * @return
 	 */
 	public static ArrayList<Subtitle> getSubtitlesFromFile (String path) {
 		return getSubtitlesFromFile(path, false, false);
 	}
-	
+
 	/**
+	 *
+	 * This method is responsible for parsing a STR file.
+	 *
+	 * This method will not have any new line and also will not make the use of nodes see: Node {@link SRTParser#getSubtitlesFromFile(String, boolean, boolean)}}
+	 *
 	 * Metodo responsavel por fazer parse de um arquivos de legenda. <br>
-	 * Obs. O texto pode ou nao conter quebra de linhas e n�o � usado Node {@link SRTParser#getSubtitlesFromFile(String, boolean, boolean)}}
+	 * Obs. O texto nao vai conter quebra de linhas e nao é utilizado Node {@link SRTParser#getSubtitlesFromFile(String, boolean, boolean)}}
 	 * @param path
 	 * @return
 	 */
-	public static ArrayList<Subtitle> getSubtitlesFromFile (String path, boolean twm) {
-		return getSubtitlesFromFile(path, twm, false);
+	public static ArrayList<Subtitle> getSubtitlesFromFile (String path, boolean keepNewlinesEscape) {
+		return getSubtitlesFromFile(path, keepNewlinesEscape, false);
 	}
-	
+
 	/**
+	 *
+	 * This method is responsible for parsing a STR file.
+	 *
+	 * This method will not have any new line and also will not make the use of nodes see: Node {@link SRTParser#getSubtitlesFromFile(String, boolean, boolean)}}
+	 * Note that you can configure if you want to make the use of Nodes: by setting the parameter usingNodes to true
+	 *
 	 * Metodo responsavel por fazer parse de um arquivos de legenda. <br>
-	 * Obs. O texto n�o vai conter quebra de linhas e pode ser usado Node
+	 *
 	 * @param path
+	 * @param keepNewlinesEscape
+	 * @param usingNodes
 	 * @return
 	 */
-	public static ArrayList<Subtitle> getSubtitlesFromFile (String path, boolean twm, boolean usingNodes) {
-		
+	public static ArrayList<Subtitle> getSubtitlesFromFile (String path, boolean keepNewlinesEscape, boolean usingNodes) {
+
 		ArrayList<Subtitle> subtitles = null;
-		Subtitle sub = null;
-		StringBuilder srt = null;
+		Subtitle subtitle;
+		StringBuilder srt;
 
-		try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(new File(path)), DEFAULT_CHARSET))) {
-			
+		try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(path), DEFAULT_CHARSET))) {
+
 			subtitles = new ArrayList<>();
-			sub = new Subtitle();
+			subtitle = new Subtitle();
 			srt = new StringBuilder();
-			
-			while (br.ready()) {
-				
-				String line = br.readLine();
-				
-				Matcher matcher = PATTERN_NUMBERS.matcher(line); 
+
+			while (bufferedReader.ready()) {
+
+				String line = bufferedReader.readLine();
+
+				Matcher matcher = PATTERN_NUMBERS.matcher(line);
 
 				if (matcher.find()) {
-					sub.id = Integer.parseInt(matcher.group(1)); // index
-					line = br.readLine();
+					subtitle.id = Integer.parseInt(matcher.group(1)); // index
+					line = bufferedReader.readLine();
 				}
-				
+
 				matcher = PATTERN_TIME.matcher(line);
-				
+
 				if (matcher.find()) {
-					sub.startTime = matcher.group(1); // start time
-					sub.timeIn = SRTUtils.textTimeToMillis(sub.startTime);
-					sub.endTime = matcher.group(2); // end time
-					sub.timeOut = SRTUtils.textTimeToMillis(sub.endTime);
+					subtitle.startTime = matcher.group(PATTERN_TIME_REGEX_GROUP_START_TIME); // start time
+					subtitle.timeIn = SRTUtils.textTimeToMillis(subtitle.startTime);
+					subtitle.endTime = matcher.group(PATTERN_TIME_REGEX_GROUP_END_TIME); // end time
+					subtitle.timeOut = SRTUtils.textTimeToMillis(subtitle.endTime);
 				}
-				
+
 				String aux;
-				while ((aux = br.readLine()) != null && !aux.isEmpty()) {
+				while ((aux = bufferedReader.readLine()) != null && !aux.isEmpty()) {
 					srt.append(aux);
-					if (twm)
+					if (keepNewlinesEscape)
 						srt.append("\n");
 					else {
-						if (!line.endsWith(" ")) // for new lines '\n' removed from BufferedReader
+						if (!line.endsWith(" ")) // for any new lines '\n' removed from BufferedReader
 							srt.append(" ");
 					}
 				}
@@ -93,24 +116,24 @@ public final class SRTParser {
 				srt.delete(srt.length()-1, srt.length()); // remove '\n' or space from end string
 
 				line = srt.toString();
-				srt.setLength(0);
+				srt.setLength(0); // Clear buffer
 
 				if (line != null && !line.isEmpty())
-					line = line.replaceAll("<[^>]*>", ""); // clear all tags
-				
-				sub.text = line;
-				subtitles.add(sub);
+					line = line.replaceAll(REGEX_REMOVE_TAGS, ""); // clear all tags
+
+				subtitle.text = line;
+				subtitles.add(subtitle);
 
 				if (usingNodes) {
-					sub.nextSubtitle = new Subtitle();
-					sub = sub.nextSubtitle;
+					subtitle.nextSubtitle = new Subtitle();
+					subtitle = subtitle.nextSubtitle;
 				} else {
-					sub = new Subtitle();
+					subtitle = new Subtitle();
 				}
 			}
 		} catch (Exception e) {
 			logger.error("error parsing srt file", e);
-		} 
+		}
 		return subtitles;
 	}
 }

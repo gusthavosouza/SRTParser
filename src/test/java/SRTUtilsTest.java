@@ -27,7 +27,7 @@ public class SRTUtilsTest {
         // setup
 
         //given
-        long textInMills = SRTUtils.textTimeToMillis(null);
+        SRTUtils.textTimeToMillis(null);
         // assert
     }
 
