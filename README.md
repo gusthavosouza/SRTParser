@@ -12,7 +12,7 @@ The purpose of this project is to give Java or Android developers an easy, fast,
 
 You can easily read srt files, re-sync and search for a specific subtitle in your player, or anything that is needed a subtitle.
 
-##### Ussage
+##### The usage of the project:
 For testing, we have a class called Test.java in package com.gustavo.test, or look code bellow
 
 ```	
@@ -24,7 +24,7 @@ For testing, we have a class called Test.java in package com.gustavo.test, or lo
 	
 	boolean keepNewLinesEscaped = true;
 	
-	ArrayList<Subtitle> subtitles = SRTReader.getSubtitlesFromFile(path, keepNewLinesEscaped);
+	ArrayList<Subtitle> subtitles = SRTParser.getSubtitlesFromFile(path, keepNewLinesEscaped);
 
 	for (Subtitle subtitle : subtitles) {
 		logger.info(subtitle);
