@@ -1,6 +1,5 @@
-package test.java;
 
-import main.java.gusthavo.utils.SRTUtils;
+import com.github.gusthavo.utils.SRTUtils;
 import org.junit.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

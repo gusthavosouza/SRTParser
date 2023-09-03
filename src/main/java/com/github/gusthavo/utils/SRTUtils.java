@@ -1,4 +1,8 @@
-package main.java.gusthavo.utils;
+package com.github.gusthavo.utils;
+
+import com.github.gusthavo.srt.Subtitle;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -9,12 +13,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-
-import main.java.gusthavo.srt.SRTParser;
-import main.java.gusthavo.srt.Subtitle;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public final class SRTUtils {
 

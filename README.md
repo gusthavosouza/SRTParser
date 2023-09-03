@@ -20,8 +20,8 @@ You can easily read srt files, re-sync and search for a specific subtitle in you
 ## The usage of the project:
 
 ```	
-import main.java.gusthavo.srt.SRTParser;
-import main.java.gusthavo.srt.Subtitle;
+import main.gusthavo.srt.SRTParser;
+import main.gusthavo.srt.Subtitle;
 
 import java.io.File;
 import java.util.ArrayList;
