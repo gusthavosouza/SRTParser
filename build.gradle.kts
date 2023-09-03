@@ -22,7 +22,7 @@ dependencies {
     api("org.junit.jupiter:junit-jupiter:5.8.2")
 }
 
-group = "main.gusthavo.srt"
+group = "com.github.gusthavo.srt"
 version = "0.0.1"
 description = "SRTParser"
 java.sourceCompatibility = JavaVersion.VERSION_1_8
