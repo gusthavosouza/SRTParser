@@ -134,8 +134,8 @@ public final class SRTUtils {
 	public static Subtitle findSubtitle (final Subtitle subtitle, long timeMillis) {
 		if (subtitle == null) return null;
 
-		Subtitle subAux;
-		while (( subAux = subtitle.nextSubtitle ) != null)
+		Subtitle subAux = subtitle;
+		while (( subAux = subAux.nextSubtitle ) != null)
 			if (inTime(subAux, timeMillis))
 				return subAux;
 
