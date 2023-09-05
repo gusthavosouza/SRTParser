@@ -1,6 +1,6 @@
-package com.github.gusthavo.utils;
+package io.github.gusthavo.utils;
 
-import com.github.gusthavo.srt.Subtitle;
+import io.github.gusthavo.srt.Subtitle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

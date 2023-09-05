@@ -1,4 +1,4 @@
-package com.github.gusthavo.srt;
+package io.github.gusthavo.srt;
 
 public class Subtitle {
 

@@ -1,5 +1,5 @@
 
-import com.github.gusthavo.utils.SRTUtils;
+import io.github.gusthavo.utils.SRTUtils;
 import org.junit.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
