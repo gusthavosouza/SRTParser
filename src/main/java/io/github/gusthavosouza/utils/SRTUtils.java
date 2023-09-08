@@ -77,7 +77,7 @@ public final class SRTUtils {
 		long millis = millisToText % 1000;
 
 		if (hours < 0) hours = 0;
-		if (minutes < 0) millis = 0;
+		if (minutes < 0) minutes = 0;
 		if (seconds < 0) seconds = 0;
 		if (millis < 0) millis = 0;
 
